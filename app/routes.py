@@ -1,3 +1,4 @@
+from azure.servicebus import ServiceBusClient, ServiceBusMessage
 from app import app, db, queue_client
 from datetime import datetime
 from app.models import Attendee, Conference, Notification
@@ -49,6 +50,10 @@ def attendees():
     return render_template('attendees.html', attendees=attendees)
 
 
+# Initialize Service Bus client
+servicebus_client = ServiceBusClient.from_connection_string("YourConnectionStringHere")
+queue_client = servicebus_client.get_queue("YourQueueName")
+
 @app.route('/Notifications')
 def notifications():
     notifications = Notification.query.order_by(Notification.id).all()
@@ -67,28 +72,18 @@ def notification():
             db.session.add(notification)
             db.session.commit()
 
-            ##################################################
-            ## TODO: Refactor This logic into an Azure Function
-            ## Code below will be replaced by a message queue
-            #################################################
-            attendees = Attendee.query.all()
+            # Queue the notification ID into Azure Service Bus
+            notification_id = notification.id
+            message = ServiceBusMessage(str(notification_id))
+            queue_client.send_messages(message)
 
-            for attendee in attendees:
-                subject = '{}: {}'.format(attendee.first_name, notification.subject)
-                send_email(attendee.email, subject, notification.message)
-
-            notification.completed_date = datetime.utcnow()
-            notification.status = 'Notified {} attendees'.format(len(attendees))
+            # Update the status of the notification to indicate it's been enqueued
+            notification.status = 'Notification ID enqueued'
             db.session.commit()
-            # TODO Call servicebus queue_client to enqueue notification ID
-
-            #################################################
-            ## END of TODO
-            #################################################
-
+            
             return redirect('/Notifications')
-        except :
-            logging.error('log unable to save notification')
+        except Exception as e:
+            logging.error(f'Log unable to save notification or enqueue message: {str(e)}')
 
     else:
         return render_template('notification.html')

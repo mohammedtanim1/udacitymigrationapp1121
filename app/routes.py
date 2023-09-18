@@ -51,8 +51,8 @@ def attendees():
 
 
 # Initialize Service Bus client
-servicebus_client = ServiceBusClient.from_connection_string("YourConnectionStringHere")
-queue_client = servicebus_client.get_queue("YourQueueName")
+servicebus_client = ServiceBusClient.from_connection_string("Endpoint=sb://servicebusazure1121.servicebus.windows.net/;SharedAccessKeyName=notificationqueue;SharedAccessKey=lUAyuUKxWgrO6HZCKu43QoPymHOOE9YBd+ASbAIzja4=;EntityPath=notificationqueue")
+queue_client = servicebus_client.get_queue("notificationqueue")
 
 @app.route('/Notifications')
 def notifications():

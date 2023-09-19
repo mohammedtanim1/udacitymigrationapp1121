@@ -5,7 +5,7 @@ app_dir = os.path.abspath(os.path.dirname(__file__))
 class BaseConfig:
     DEBUG = True
     POSTGRES_URL="azurepostgressql1121.postgres.database.azure.com"  #TODO: Update value
-    POSTGRES_USER="azurepostgres" #TODO: Update value
+    POSTGRES_USER="azurepostgres@azurepostgressql1121" #TODO: Update value
     POSTGRES_PW="Tanim1990"   #TODO: Update value
     POSTGRES_DB="techconfdb"   #TODO: Update value
     DB_URL = 'postgresql://{user}:{pw}@{url}/{db}'.format(user=POSTGRES_USER,pw=POSTGRES_PW,url=POSTGRES_URL,db=POSTGRES_DB)

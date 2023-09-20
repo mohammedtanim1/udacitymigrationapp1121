@@ -28,7 +28,7 @@ def main(msg: func.ServiceBusMessage):
         attendees = cursor.fetchall()
 
         # Initialize SendGrid API client
-        sendgrid_client = SendGridAPIClient(os.getenv("SENDGRID_API_KEY"))
+        #sendgrid_client = SendGridAPIClient(os.getenv("SENDGRID_API_KEY"))
 
         # Loop through each attendee and send an email with a personalized subject
         for email, first_name in attendees:
@@ -39,7 +39,7 @@ def main(msg: func.ServiceBusMessage):
                 subject=personalized_subject,
                 html_content=message
             )
-            sendgrid_client.send(mail)
+            #sendgrid_client.send(mail)
 
         # Update the notification table by setting the completed date and updating the status with the total number of attendees notified
         cursor.execute(

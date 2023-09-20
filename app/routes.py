@@ -63,13 +63,13 @@ def notifications():
 @app.route('/Notification', methods=['POST', 'GET'])
 def notification():
     if request.method == 'POST':
-        notification = Notification()
-        notification.message = request.form['message']
-        notification.subject = request.form['subject']
-        notification.status = 'Notifications submitted'
-        notification.submitted_date = datetime.utcnow()
-
         try:
+            notification = Notification()
+            notification.message = request.form['message']
+            notification.subject = request.form['subject']
+            notification.status = 'Notifications submitted'
+            notification.submitted_date = datetime.utcnow()
+
             db.session.add(notification)
             db.session.commit()
 
@@ -77,17 +77,17 @@ def notification():
             notification_id = notification.id
             message = ServiceBusMessage(str(notification_id))
             with queue_sender:
-                queue_sender.send_messages(service_bus_message)
-
+                queue_sender.send_messages(message)
 
             # Update the status of the notification to indicate it's been enqueued
             notification.status = 'Notification ID enqueued'
             db.session.commit()
-            
-            return redirect('/Notifications')
+
+            return redirect('/Notifications')  # Redirect to another page after successful POST
         except Exception as e:
             logging.error(f'Log unable to save notification or enqueue message: {str(e)}')
-
+            flash('An error occurred while processing your request.', 'error')
+            return redirect('/Notification')  # Redirect to a relevant page after error
     else:
         return render_template('notification.html')
 

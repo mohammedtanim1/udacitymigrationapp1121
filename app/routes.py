@@ -1,9 +1,9 @@
 from azure.servicebus import ServiceBusClient, ServiceBusMessage
-from app import app, db, queue_client
+from app import app, db , servicebus_client
 from datetime import datetime
 from app.models import Attendee, Conference, Notification
 from flask import render_template, session, request, redirect, url_for, flash, make_response, session
-from azure.servicebus import Message
+from azure.servicebus import ServiceBusMessage
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 import logging
@@ -52,7 +52,8 @@ def attendees():
 
 # Initialize Service Bus client
 servicebus_client = ServiceBusClient.from_connection_string("Endpoint=sb://servicebusazure1121.servicebus.windows.net/;SharedAccessKeyName=notificationqueue;SharedAccessKey=lUAyuUKxWgrO6HZCKu43QoPymHOOE9YBd+ASbAIzja4=;EntityPath=notificationqueue")
-queue_client = servicebus_client.get_queue("notificationqueue")
+queue_sender = servicebus_client.get_queue_sender(queue_name="notificationqueue")
+
 
 @app.route('/Notifications')
 def notifications():
@@ -75,7 +76,9 @@ def notification():
             # Queue the notification ID into Azure Service Bus
             notification_id = notification.id
             message = ServiceBusMessage(str(notification_id))
-            queue_client.send_messages(message)
+            with queue_sender:
+                queue_sender.send_messages(service_bus_message)
+
 
             # Update the status of the notification to indicate it's been enqueued
             notification.status = 'Notification ID enqueued'

@@ -20,7 +20,7 @@ def main(msg: func.ServiceBusMessage):
         cursor = conn.cursor()
 
         # Get notification message and subject from database using the notification_id
-        cursor.execute("SELECT subject, message FROM notifications WHERE id=%s", (notification_id,))
+        cursor.execute("SELECT subject, message FROM notification WHERE id=%s", (notification_id,))
         subject, message = cursor.fetchone()
 
         # Get attendees email and name
@@ -46,7 +46,7 @@ def main(msg: func.ServiceBusMessage):
             # Update the notification table by setting the completed date and updating the status with the total number of attendees notified
             update_status = f'Notified {notified_counter} Attendees'
             cursor.execute(
-                 "UPDATE notifications SET status=%s, completed_date=%s, attendees_notified=%s WHERE id=%s", 
+                 "UPDATE notification SET status=%s, completed_date=%s, attendees_notified=%s WHERE id=%s", 
                 (update_status, datetime.utcnow().strftime("%d-%m-%Y %I:%M %p"), notified_counter, notification_id)
             )
             

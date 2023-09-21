@@ -14,7 +14,7 @@ def main(msg: func.ServiceBusMessage):
     try:
         # Get connection to database
         conn = psycopg2.connect(host="azurepostgressql1121.postgres.database.azure.com", 
-                                dbname="techconfdb"
+                                dbname="techconfdb",
                                 user="azurepostgres@azurepostgressql1121", 
                                 password="Tanim1990")
         cursor = conn.cursor()
@@ -46,8 +46,8 @@ def main(msg: func.ServiceBusMessage):
             # Update the notification table by setting the completed date and updating the status with the total number of attendees notified
             update_status = f'Notified {notified_counter} Attendees'
             cursor.execute(
-                 "UPDATE notification SET status=%s, completed_date=%s, attendees_notified=%s WHERE id=%s", 
-                (update_status, datetime.utcnow().strftime("%d-%m-%Y %I:%M %p"), notified_counter, notification_id)
+                "UPDATE notification SET status=%s, completed_date=%s, attendees_notified=%s WHERE id=%s", 
+                (update_status, datetime.utcnow(), notified_counter, notification_id)
             )
             
             conn.commit()

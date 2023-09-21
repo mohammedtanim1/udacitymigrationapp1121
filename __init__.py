@@ -3,8 +3,8 @@ import azure.functions as func
 import psycopg2
 import os
 from datetime import datetime
-from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import Mail
+#from sendgrid import SendGridAPIClient
+#from sendgrid.helpers.mail import Mail
 
 def main(msg: func.ServiceBusMessage):
 
@@ -24,14 +24,14 @@ def main(msg: func.ServiceBusMessage):
         subject, message = cursor.fetchone()
 
         # Get attendees email and name
-        cursor.execute("SELECT email, first_name FROM attendees")
+        cursor.execute("SELECT email FROM attendee")
         attendees = cursor.fetchall()
 
         # Initialize SendGrid API client
         #sendgrid_client = SendGridAPIClient(os.getenv("SENDGRID_API_KEY"))
 
         # Loop through each attendee and send an email with a personalized subject
-        for email, first_name in attendees:
+        for email in attendees:
             #personalized_subject = subject.replace("{first_name}", first_name)
             #mail = Mail(
                 #from_email=os.getenv("SENDER_EMAIL"),

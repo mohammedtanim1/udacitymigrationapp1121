@@ -7,6 +7,7 @@ from datetime import datetime
 #from sendgrid.helpers.mail import Mail
 
 def main(msg: func.ServiceBusMessage):
+    notified_counter = 0
 
     notification_id = int(msg.get_body().decode('utf-8'))
     logging.info('Python ServiceBus queue trigger processed message: %s', notification_id)

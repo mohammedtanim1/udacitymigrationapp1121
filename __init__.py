@@ -41,12 +41,12 @@ def main(msg: func.ServiceBusMessage):
             )
             ##sendgrid_client.send(mail)
 
-        # Update the notification table by setting the completed date and updating the status with the total number of attendees notified
-        cursor.execute(
-            "UPDATE notifications SET status=%s, completed_date=%s, attendees_notified=%s WHERE id=%s", 
-            ('Completed', datetime.utcnow(), len(attendees), notification_id)
-        )
-        conn.commit()
+            # Update the notification table by setting the completed date and updating the status with the total number of attendees notified
+            cursor.execute(
+                "UPDATE notifications SET status=%s, completed_date=%s, attendees_notified=%s WHERE id=%s", 
+                ('Completed', datetime.utcnow(), len(attendees), notification_id)
+            )
+            conn.commit()
 
     except (Exception, psycopg2.DatabaseError) as error:
         logging.error(error)

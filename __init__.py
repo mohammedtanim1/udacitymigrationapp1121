@@ -32,13 +32,12 @@ def main(msg: func.ServiceBusMessage):
 
         # Loop through each attendee and send an email with a personalized subject
         for email, first_name in attendees:
-            personalized_subject = subject.replace("{first_name}", first_name)
-            mail = Mail(
-                from_email=os.getenv("SENDER_EMAIL"),
-                to_emails=email,
-                subject=personalized_subject,
-                html_content=message
-            )
+            #personalized_subject = subject.replace("{first_name}", first_name)
+            #mail = Mail(
+                #from_email=os.getenv("SENDER_EMAIL"),
+                #to_emails=email,
+                #subject=personalized_subject,
+                #html_content=message)
             ##sendgrid_client.send(mail)
             
             # Increment the notified counter

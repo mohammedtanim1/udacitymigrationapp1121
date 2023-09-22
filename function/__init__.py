@@ -10,7 +10,12 @@ from datetime import datetime
 def main(msg: func.ServiceBusMessage):
     notified_counter = 0
 
-    notification_id = int(msg.get_body().decode('utf-8'))
+    try:
+        msg_body = msg.get_body().decode('utf-8')
+        cleaned_msg_body = msg_body.replace("Notification#", "")
+        notification_id = int(cleaned_msg_body)
+    except ValueError:
+        print("The message body cannot be converted to an integer.")
     logging.info('Python ServiceBus queue trigger processed message: %s', notification_id)
 
     try:
@@ -29,18 +34,8 @@ def main(msg: func.ServiceBusMessage):
         cursor.execute("SELECT email FROM attendee")
         attendees = cursor.fetchall()
 
-        # Initialize SendGrid API client
-        #sendgrid_client = SendGridAPIClient(os.getenv("SENDGRID_API_KEY"))
-
         # Loop through each attendee and send an email with a personalized subject
         for email in attendees:
-            #personalized_subject = subject.replace("{first_name}", first_name)
-            #mail = Mail(
-                #from_email=os.getenv("SENDER_EMAIL"),
-                #to_emails=email,
-                #subject=personalized_subject,
-                #html_content=message)
-            ##sendgrid_client.send(mail)
             
             # Increment the notified counter
             notified_counter += 1

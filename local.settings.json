@@ -1,0 +1,8 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "FUNCTIONS_WORKER_RUNTIME": "python",
+    "AzureWebJobsStorage": "DefaultEndpointsProtocol=https;AccountName=storageaccount11211;AccountKey=pacnuSu4sguWneDBhCg0eyPXPLHiTxY3p10TRy7n3XPui3ul6VPzx1pO+K42onchOJsrtKgrIHFx+AStD7wGmA==;EndpointSuffix=core.windows.net",
+    "ServiceBusConnectionAppSetting": "Endpoint=sb://servicebusazure1121.servicebus.windows.net/;SharedAccessKeyName=notificationqueue;SharedAccessKey=lUAyuUKxWgrO6HZCKu43QoPymHOOE9YBd+ASbAIzja4="
+  }
+}

@@ -4,6 +4,7 @@ import azure.functions as func
 import psycopg2
 import os
 from datetime import datetime
+from function.models import Attendee, Conference, Notification
 #from sendgrid import SendGridAPIClient
 #from sendgrid.helpers.mail import Mail
 

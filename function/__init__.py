@@ -13,7 +13,7 @@ def main(msg: func.ServiceBusMessage):
     try:
         msg_body = msg.get_body().decode('utf-8')
         cleaned_msg_body = msg_body.replace("Notification#", "")
-        #notification_id = int(cleaned_msg_body)
+        notification_id = int(cleaned_msg_body)
     except ValueError:
         print("The message body cannot be converted to an integer.")
     logging.info('Python ServiceBus queue trigger processed message: %s', notification_id)

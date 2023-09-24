@@ -1,5 +1,6 @@
 from azure.servicebus import ServiceBusClient, ServiceBusMessage
-from app import app, db , servicebus_client ,  send_message_to_service_bus
+from app import app, db , servicebus_client 
+from .utils import send_message_to_service_bus
 from datetime import datetime
 from app.models import Attendee, Conference, Notification
 from flask import render_template, session, request, redirect, url_for, flash, make_response, session

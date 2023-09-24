@@ -9,6 +9,7 @@ from datetime import datetime
 
 def main(msg: func.ServiceBusMessage):
     notified_counter = 0
+    notification_id = None
 
     try:
         msg_body = msg.get_body().decode('utf-8')

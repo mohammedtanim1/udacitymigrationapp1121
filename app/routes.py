@@ -7,6 +7,7 @@ from azure.servicebus import ServiceBusMessage
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 import logging
+from . import app, send_message_to_service_bus
 
 @app.route('/')
 def index():
@@ -75,9 +76,11 @@ def notification():
 
             # Queue the notification ID into Azure Service Bus
             notification_id = notification.id
-            message = ServiceBusMessage(str(notification_id))
-            with queue_sender:
-                queue_sender.send_messages(message)
+            send_message_to_service_bus(str(notification_id))
+            
+            #message = ServiceBusMessage(str(notification_id))
+            #with queue_sender:
+                #queue_sender.send_messages(message)
 
             # Update the status of the notification to indicate it's been enqueued
             notification.status = 'Notification ID enqueued'

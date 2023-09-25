@@ -1,5 +1,5 @@
 from azure.servicebus import ServiceBusClient, ServiceBusMessage
-from app import app, db , servicebus_client 
+from app import app, db  
 from datetime import datetime
 from app.models import Attendee, Conference, Notification
 from flask import render_template, session, request, redirect, url_for, flash, make_response, session
@@ -77,10 +77,9 @@ def notification():
             # Queue the notification ID into Azure Service Bus
             notification_id = notification.id
             with servicebus_client:
-                sender = servicebus_client.get_queue_sender(queue_name=app.config.get('SERVICE_BUS_QUEUE_NAME'))
-                with sender:
-                    sender.send_messages([ServiceBusMessage(notification_id)])
-            
+                with queue_sender:
+                    message = ServiceBusMessage(notification_id)
+                    queue_sender.send_messages([message])
             #message = ServiceBusMessage(str(notification_id))
             #with queue_sender:
                 #queue_sender.send_messages(message)

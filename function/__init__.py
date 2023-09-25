@@ -14,7 +14,7 @@ def main(msg: func.ServiceBusMessage):
     try:
         msg_body = msg.get_body().decode('utf-8')
         cleaned_msg_body = msg_body.replace("Notification#", "")
-        notification_id = cleaned_msg_body
+        notification_id = int(cleaned_msg_body)
     except ValueError:
         print("The message body cannot be converted to an integer.")
     logging.info('Python ServiceBus queue trigger processed message: %s', notification_id)
@@ -44,7 +44,7 @@ def main(msg: func.ServiceBusMessage):
             # Update the notification table by setting the completed date and updating the status with the total number of attendees notified
             update_status = f'Notified {notified_counter} Attendees'
             cursor.execute(
-                "UPDATE notification SET status=%s, completed_date=%s, attendees_notified=%s WHERE id=%s", 
+                "UPDATE notification SET status=%s, completed_date=%s WHERE id=%s", 
                 (update_status, datetime.utcnow(), notified_counter, notification_id)
             )
             

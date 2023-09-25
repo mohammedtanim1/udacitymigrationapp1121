@@ -78,7 +78,7 @@ def notification():
             notification_id = notification.id
             with servicebus_client:
                 with queue_sender:
-                    message = ServiceBusMessage(notification_id)
+                    message = ServiceBusMessage(str(notification_id))
                     queue_sender.send_messages([message])
             #message = ServiceBusMessage(str(notification_id))
             #with queue_sender:
